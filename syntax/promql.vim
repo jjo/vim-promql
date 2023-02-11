@@ -41,11 +41,13 @@ syntax match prometheusOperator "\v\!\~"
 
 syntax match prometheusSpecial "\v[()]"
 
-syntax keyword prometheusAggrOperator sum min max avg stddev stdvar count
+" From https://raw.githubusercontent.com/prometheus/prometheus/main/docs/querying/operators.md
+syntax keyword prometheusAggrOperator and or unless on ignoring group_left group_right
+syntax keyword prometheusAggrOperator sum min max avg group stddev stdvar count
 syntax keyword prometheusAggrOperator count_values bottomk topk quantile
-syntax keyword prometheusAggrOperator on group by or and unless with by group_left group_right
 
 syntax match prometheusRangeSelector "\d\+[smhdwy]"
+syntax match prometheusRangeSelector "offset"
 
 syntax region String start=+\z(#*\)\z("\)+ skip="\\\z2" end="\z2\z1"
 
