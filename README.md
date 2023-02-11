@@ -1,2 +1,3 @@
-# vim-prometheus
-Syntax files for Prometheus alerting rules
+# vim-promql
+Syntax files for Prometheus queries, derived from original
+github.com/skreuzer/vim-prometheus repository.
