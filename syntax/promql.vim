@@ -26,17 +26,28 @@ if !exists("*GetPromqlIndent")
         endif
 
         let ind = indent(lnum)
-        let line = getline(lnum)
+        let pline = getline(lnum)
+        let cline = getline(v:lnum)
+
+        " Outdent for closing brace
+        if cline =~ '^\s*}'
+            let ind = indent(s:MatchingOpenBrace(v:lnum, cline))
+            return ind
+        endif
+
+        " Increase indent after an opening brace
+        if pline =~ '{\s*$'
+            let ind = ind + &sw
+        endif
 
         " Increase indent after an opening parenthesis
-        if line =~ '([^)]*$'
+        if pline =~ '([^)]*$'
             let ind = ind + &sw
         endif
 
         " Decrease indent for closing parenthesis
-        let line = getline(v:lnum)
-        if line =~ '^\s*)'
-            let ind = indent(s:MatchingOpenParen(v:lnum, line))
+        if cline =~ '^\s*)'
+            let ind = indent(s:MatchingOpenParen(v:lnum, cline))
         endif
 
         return ind
@@ -47,6 +58,13 @@ if !exists("*GetPromqlIndent")
         let col = matchend(a:line, '^\s*)')
         call cursor(a:lnum, col)
         let [m_lnum, m_col] = searchpairpos('(', '', ')', 'bW')
+        return m_lnum
+    endfunction
+
+    function s:MatchingOpenBrace(lnum, line)
+        let col = matchend(a:line, '^\s*}')
+        call cursor(a:lnum, col)
+        let [m_lnum, m_col] = searchpairpos('{', '', '}', 'bW')
         return m_lnum
     endfunction
 endif
